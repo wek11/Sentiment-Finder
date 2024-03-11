@@ -45,11 +45,34 @@ def parseData(data):
             elif "Copyright current_year BBC" in b:
                 removeRest = True
                 removeList.append(b)
-        b.strip("'")
-        b.strip("")
+
+    removeRest = False
+
+    for i in range(2, len(text)):
+        if  text[-i] not in removeList:
+            if text[-i] == text[-i + 1]:
+                removeList.append(text[-i])
+            elif int(len(text[-i])) > 20 and int(len(text[-i+1]) > 20):
+                if text[-i][:15] == text[-i+1][:15]:
+                    removeList.append(text[-i])
+
+    for i in range(1, len(text)):
+        if removeRest and text[-i] not in removeList:
+            print(text[-i] + ":::::: REMOVING")
+            removeList.append(text[-i])
+        elif "www.bbc" in text[-i - 1]:
+            removeRest = True
+
     for term in removeList:
         text.remove(term)
     # print(text)
+    for i in range(len(text)):
+        if text[i].endswith(",\"attributes\""):
+            text[i] = text[i][:len(text[i]) - len(",\"attributes\"")]
+        text[i] = text[i].strip('" ')
+
+
+
     return text
 
 
