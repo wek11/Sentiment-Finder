@@ -19,7 +19,6 @@ def parseData(data):
     removeList = []
     appendData = False
     text = []
-    ind = 0
     parsedData = data.split(':')
     # print(parsedData)
     for i in parsedData:
@@ -32,6 +31,11 @@ def parseData(data):
             # print(True)
         else:
             appendData = False
+
+    for i in range(1, len(text)):
+        if "www.bbc" in text[-i - 1]:
+            text = text[len(text) - i:]
+            break
 
     for b in text:
         if removeRest:
@@ -46,25 +50,21 @@ def parseData(data):
                 removeRest = True
                 removeList.append(b)
 
-    removeRest = False
-
     for i in range(2, len(text)):
-        if  text[-i] not in removeList:
-            if text[-i] == text[-i + 1]:
+        if text[-i] not in removeList:
+            if text[-i] in text[:len(text) - i]:
                 removeList.append(text[-i])
             elif int(len(text[-i])) > 20 and int(len(text[-i+1]) > 20):
                 if text[-i][:15] == text[-i+1][:15]:
                     removeList.append(text[-i])
 
-    for i in range(1, len(text)):
-        if removeRest and text[-i] not in removeList:
-            print(text[-i] + ":::::: REMOVING")
-            removeList.append(text[-i])
-        elif "www.bbc" in text[-i - 1]:
-            removeRest = True
+    for i in range(0, len(text)):
+        if text[i].endswith(",\"locator"):
+            text[i] = text[i][:len(text[i]) - len(",\"locator")]
 
     for term in removeList:
-        text.remove(term)
+        if term in text:
+            text.remove(term)
     # print(text)
     for i in range(len(text)):
         if text[i].endswith(",\"attributes\""):
@@ -72,7 +72,7 @@ def parseData(data):
         text[i] = text[i].strip('" ')
 
 
-
+ 
     return text
 
 
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     testData = open("testData.txt", 'r+', encoding="utf-8")
 
     if testData.read() == "":
-        rawData = requests.get('https://www.bbc.com/news/world-us-canada-68510250', headers=headers, verify=False).text
+        rawData = requests.get('https://www.bbc.com/news/uk-68542187', headers=headers, verify=False).text
         print(rawData)
         testData.write(rawData)
 
