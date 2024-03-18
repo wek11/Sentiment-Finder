@@ -1,12 +1,5 @@
 import requests, sys
 
-
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
 def print_hi(name):
     # Use a breakpoint in the code line below to debug your script.
     print(f"Hi, {name}")  # Press Ctrl+F8 to toggle the breakpoint.
@@ -98,7 +91,7 @@ def parse_data(data):
 
     return text
 
-# Press the green button in the gutter to run the script.
+
 if __name__ == '__main__':
     sys.stdout.reconfigure(encoding='utf-8')
     headers = {
@@ -109,7 +102,7 @@ if __name__ == '__main__':
     test_data = open("testData.txt", 'r+', encoding="utf-8")
 
     if test_data.read() == "":
-        rawData = requests.get('https://www.bbc.com/news/world-europe-68596231', headers=headers, verify=False).text
+        rawData = Request = requests.get('https://www.bbc.com/news/world-europe-68596231', headers=headers, verify=False).text
         print(rawData)
         test_data.write(rawData)
 
@@ -118,4 +111,3 @@ if __name__ == '__main__':
         print(i)
     test_data.close()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
